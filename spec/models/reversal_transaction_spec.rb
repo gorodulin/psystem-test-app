@@ -1,8 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ChargeTransaction, type: :model do
-
-  let(:record) { FactoryBot.create :charge_transaction }
+RSpec.describe ReversalTransaction, type: :model do
 
   context "on save" do
     it "gets 'error' status if initial transaction is not approved" do
@@ -11,7 +9,7 @@ RSpec.describe ChargeTransaction, type: :model do
         "approved" => "approved",
       }.each do |parent_status, expected_status|
         parent = FactoryBot.create(:authorize_transaction, status: parent_status)
-        record = FactoryBot.create(:charge_transaction,
+        record = FactoryBot.create(:reversal_transaction,
                                    status: "approved",
                                    authorize_transaction: parent,
                                    merchant: parent.merchant)
@@ -22,7 +20,7 @@ RSpec.describe ChargeTransaction, type: :model do
 
     it "fails to create if a duplicate exists" do
       parent = FactoryBot.create(:authorize_transaction)
-      creation = -> { FactoryBot.create(:charge_transaction,
+      creation = -> { FactoryBot.create(:reversal_transaction,
                                  status: "approved",
                                  authorize_transaction: parent,
                                  merchant: parent.merchant) }
