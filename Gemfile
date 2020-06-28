@@ -11,6 +11,7 @@ gem "webpacker", "~> 4.0"
 gem "jbuilder", "~> 2.7"
 gem "slim-rails"
 gem "cancancan"
+gem "whenever"
 # Use Active Model has_secure_password
 # gem "bcrypt", "~> 3.1.7"
 # Use Active Storage variant

@@ -16,3 +16,9 @@ Top priority: not to allow to store invalid/inconsistent data.
 Application task names are prefixed with `psystem`.
 
 `bundle exec rake psystem:transaction:purge`
+
+### Cron jobs
+
+Described in `config/schedule.rb`
+
+To update crontab run `whenever --update-crontab`
