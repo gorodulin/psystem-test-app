@@ -4,7 +4,7 @@ FactoryBot.define do
     name { "Sea Star Store" }
     description { "yachts and shells" }
     email { "seller@store.com" }
-    status { "inactive" }
+    status { "active" }
     total_transaction_sum { 0 }
   end
 end

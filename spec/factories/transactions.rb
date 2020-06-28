@@ -1,3 +1,5 @@
+# TODO: DRY with traits
+
 FactoryBot.define do
   factory :transaction do
     merchant
@@ -12,7 +14,7 @@ FactoryBot.define do
     merchant
     id { SecureRandom.uuid }
     amount { 1 }
-    status { :approved }
+    status { "approved" }
     customer_email { "a@b.c" }
     customer_phone { "+1234567890" }
   end
@@ -22,7 +24,7 @@ FactoryBot.define do
     authorize_transaction
     merchant { authorize_transaction.merchant }
     amount { 1 }
-    status { :approved }
+    status { "approved" }
     customer_email { authorize_transaction.customer_email }
     customer_phone { authorize_transaction.customer_phone }
   end
@@ -32,7 +34,7 @@ FactoryBot.define do
     charge_transaction
     merchant { charge_transaction.merchant }
     amount { charge_transaction.amount }
-    status { :approved }
+    status { "approved" }
     customer_email { charge_transaction.customer_email }
     customer_phone { charge_transaction.customer_phone }
   end
@@ -42,7 +44,7 @@ FactoryBot.define do
     authorize_transaction
     merchant { authorize_transaction.merchant }
     amount { nil }
-    status { :approved }
+    status { "approved" }
     customer_email { authorize_transaction.customer_email }
     customer_phone { authorize_transaction.customer_phone }
   end

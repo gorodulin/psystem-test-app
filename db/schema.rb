@@ -32,4 +32,5 @@ ActiveRecord::Schema.define(version: 2020_06_27_141526) do
 
   add_foreign_key "merchants", "users"
   add_foreign_key "transactions", "merchants"
+  add_foreign_key "transactions", "transactions", column: "initial_transaction_id", on_delete: :cascade
 end

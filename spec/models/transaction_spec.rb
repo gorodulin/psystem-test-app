@@ -15,5 +15,13 @@ RSpec.describe Transaction, type: :model do
     record.customer_email = "badly_formatted_email"
     expect(record).to_not be_valid
   end
+
+  it "requires merchant to be active" do
+    merchant = FactoryBot.create :merchant, status: "inactive"
+    authorize = FactoryBot.build :authorize_transaction, merchant: merchant
+    expect(authorize).not_to be_valid
+    merchant.status = "active"
+    expect(authorize).to be_valid
+  end
 end
 
