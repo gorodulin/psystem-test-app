@@ -19,7 +19,9 @@ gem "cancancan"
 gem "bootsnap", ">= 1.4.2", require: false # Reduces boot times through caching; required in config/boot.rb
 
 group :development, :test do
+  gem "ori"
   gem "factory_bot_rails"
+  gem "faker"
   gem "rspec-rails", "~> 4.0.0"
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw] # Call "byebug" anywhere in the code to stop execution and get a debugger console
 end
