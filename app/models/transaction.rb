@@ -8,13 +8,22 @@ class Transaction < ApplicationRecord
 
   belongs_to :merchant, inverse_of: :transactions
 
-  validates :customer_phone, format: { with: /\A\+[0-9-]{6,18}\z/ }
-  validates :customer_email, format: { with: ::URI::MailTo::EMAIL_REGEXP }
+  validates :customer_phone, presence: true, format: { with: /\A\+[0-9-]{6,18}\z/ }
+  validates :customer_email, presence: true, format: { with: ::URI::MailTo::EMAIL_REGEXP }
+  validates! :merchant, presence: true
 
   validate :ensure_merchant_is_active
 
   scope :those_approved, -> { where(status: "approved") }
   scope :those_erroneous, -> { where(status: "error") }
+
+  SLUGS = {
+    "authorize" => "AuthorizeTransaction",
+    "charge"    => "ChargeTransaction",
+    "refund"    => "RefundTransaction",
+    "reversal"  => "ReversalTransaction",
+  }.freeze
+
 
   private
 

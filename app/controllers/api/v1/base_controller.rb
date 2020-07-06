@@ -3,7 +3,7 @@
 module Api::V1; class BaseController < ActionController::API
   include ActionController::MimeResponds
 
-  before_action :find_merchant
+  before_action :set_merchant
 
   rescue_from ActionController::ParameterMissing do |e|
     render_error :bad_request, :bad_request, details: e.message
@@ -13,7 +13,7 @@ module Api::V1; class BaseController < ActionController::API
   private
 
   # TODO: replace with real authorization
-  def find_merchant
+  def set_merchant
     @merchant = Merchant.those_active.last
   end
 

@@ -6,5 +6,4 @@ class RefundTransaction < FollowOnTransaction
 
   belongs_to :charge_transaction, required: true, class_name: "ChargeTransaction", foreign_key: "initial_transaction_id", inverse_of: :refund_transaction
 
-
 end

@@ -1,29 +1,21 @@
-require "ostruct"
+class CreateChargeTransaction
+  include Interactor
 
-module CreateChargeTransaction
-
-  def self.call(parent:, **opts)
-    result = OpenStruct.new(error: {})
-    options = {
-      id: SecureRandom.uuid,
-      authorize_transaction: parent,
-      status: parent.can_be_charged? ? "approved" : "error",
-    }.merge(opts)
+  def call
+    attributes = context.to_h
+      .slice(:amount, :merchant, :customer_email, :customer_phone)
+      .merge \
+        id: SecureRandom.uuid,
+        authorize_transaction: context.parent,
+        status: context.parent.can_be_charged? ? "approved" : "error"
     ActiveRecord::Base.transaction do
-      result.transaction = ChargeTransaction.new(options)
-      result.transaction.tap do |o|
+      context.transaction = ChargeTransaction.new(attributes)
+      context.transaction.tap do |o|
         o.save!
         break o unless o.status_approved?
         o.merchant.increment(:total_transaction_sum, o.amount).save!
       end
     end
-    result
-  rescue ActiveRecord::RecordInvalid => e
-    result.error = { exception: e, message: "Wrong parameters", details: result.transaction.errors.messages }
-    return result
-  rescue ActiveRecord::RecordNotUnique => e
-    result.error = { exception: e, message: "Duplicate transaction" }
-    return result
   end
 
 end

@@ -12,6 +12,7 @@ gem "jbuilder", "~> 2.7"
 gem "slim-rails"
 gem "cancancan"
 gem "whenever"
+gem "interactor", "~> 3.0" # Opinionated Result object pattern with shared context
 # Use Active Model has_secure_password
 # gem "bcrypt", "~> 3.1.7"
 # Use Active Storage variant

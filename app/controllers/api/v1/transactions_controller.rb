@@ -6,13 +6,14 @@ module Api::V1; class TransactionsController < BaseController
 
   # POST /api/v1/transactions
   def create
-    @result = CreateTransaction.call(transaction_params.to_h.symbolize_keys)
+    result = CreateTransaction.call(transaction_params.to_h.symbolize_keys)
 
     respond_to do |format|
-      if @result.error.present?
-        format.json { render_error :bad_request, :bad_request, details: @result.error.slice(:message, :details) }
+      if result.failure?
+        status = result.error[:kind] || :bad_request
+        format.json { render_error status, status, details: result.error.slice(:message, :details) }
       else
-        format.json { render json: @result.transaction.attributes, status: :created }
+        format.json { render json: result.transaction.attributes, status: :created }
       end
     end
   end
