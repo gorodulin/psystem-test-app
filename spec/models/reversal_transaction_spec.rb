@@ -7,24 +7,24 @@ RSpec.describe ReversalTransaction, type: :model do
       { "error" => "error",
         "reversed" => "error",
         "approved" => "approved",
-      }.each do |parent_status, expected_status|
-        parent = FactoryBot.create(:authorize_transaction, status: parent_status)
-        record = FactoryBot.create(:reversal_transaction,
-                                   status: "approved",
-                                   authorize_transaction: parent,
-                                   merchant: parent.merchant)
+      }.each do |initial_transaction_status, expected_status|
+        initial_transaction = create(:authorize_transaction, status: initial_transaction_status)
+        record = create(:reversal_transaction,
+                         status: "approved",
+                         authorize_transaction: initial_transaction,
+                         merchant: initial_transaction.merchant)
         expect(record).to be_valid
         expect(record.status).to eq(expected_status)
       end
     end
 
     it "fails to create if a duplicate exists" do
-      parent = FactoryBot.create(:authorize_transaction)
-      creation = -> { FactoryBot.create(:reversal_transaction,
-                                 status: "approved",
-                                 authorize_transaction: parent,
-                                 merchant: parent.merchant) }
-      creation.call # First call
+      initial_transaction = create(:authorize_transaction)
+      creation = -> { create(:reversal_transaction,
+                             status: "approved",
+                             authorize_transaction: initial_transaction,
+                             merchant: initial_transaction.merchant) }
+      expect { creation.call }.to change { described_class.count }.by(1) # with approved status
       expect { creation.call }.to raise_error(ActiveRecord::RecordNotUnique)
     end
   end

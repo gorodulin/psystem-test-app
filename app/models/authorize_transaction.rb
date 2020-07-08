@@ -6,15 +6,18 @@ class AuthorizeTransaction < Transaction
   has_one :charge_transaction, -> { where.not(status: "error") }, class_name: "ChargeTransaction", foreign_key: "initial_transaction_id", dependent: :destroy
 
   validates :amount, numericality: { greater_than: 0 }
+  validates :initial_transaction_id, absence: true, if: ->(t) { t.new_record? }
 
   before_save do
-    # This allows to validate at DB-level (via uniq index)
+    # This prevents initial_transaction_id field from being empty in database,
+    # thus allows to validate at DB-level (via uniq index)
     # that every record has not more than one child record of a particular type
-    self.initial_transaction_id = self.id
+    self.initial_transaction_id = id
   end
 
   def can_be_reversed?
-    status_approved? && charge_transaction.blank?
+    ChargeTransaction.where(initial_transaction: self).where.not(status: "error").none? \
+    && status_approved?
   end
 
   alias :can_be_charged? :can_be_reversed?

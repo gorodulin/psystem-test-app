@@ -6,13 +6,16 @@ en:
           code: 20100
           title: "Bad Request"
           description: ""
-        bad_arguments:
-          code: 20200
-          title: "Bad Arguments"
+        unknown_transaction_type:
+          code: 20102
+          title: "Unknown transaction type"
           description: ""
         unknown_parent_transaction:
           code: 20101
           title: "Unknown parent transaction"
           description: ""
-
+        unprocessable_entity:
+          code: 20103
+          title: "Unprocessable entity"
+          description: ""
 

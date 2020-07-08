@@ -12,6 +12,7 @@ FactoryBot.define do
 
   factory :authorize_transaction do
     merchant
+    type { "AuthorizeTransaction" }
     id { SecureRandom.uuid }
     amount { 1 }
     status { "approved" }
@@ -22,6 +23,7 @@ FactoryBot.define do
   factory :charge_transaction do
     id { SecureRandom.uuid }
     authorize_transaction
+    type { "ChargeTransaction" }
     merchant { authorize_transaction.merchant }
     amount { 1 }
     status { "approved" }
@@ -32,6 +34,7 @@ FactoryBot.define do
   factory :refund_transaction do
     id { SecureRandom.uuid }
     charge_transaction
+    type { "RefundTransaction" }
     merchant { charge_transaction.merchant }
     amount { charge_transaction.amount }
     status { "approved" }
@@ -42,6 +45,7 @@ FactoryBot.define do
   factory :reversal_transaction do
     id { SecureRandom.uuid }
     authorize_transaction
+    type { "ReversalTransaction" }
     merchant { authorize_transaction.merchant }
     amount { nil }
     status { "approved" }

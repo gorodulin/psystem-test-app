@@ -5,7 +5,7 @@ describe CreateTransaction do
   let(:merchant) { create(:merchant) }
 
   let(:authorize_transaction_attrs) do
-    attributes_for(:authorize_transaction).merge(type: "authorize", merchant: merchant)
+    attributes_for(:authorize_transaction).merge(merchant: merchant)
   end
 
   it "is callable" do
@@ -17,13 +17,13 @@ describe CreateTransaction do
     describe "with invalid arguments" do
 
       it "returns failed result" do
-        attrs = attributes_for(:authorize_transaction).merge(type: "authorize", merchant: merchant)
+        attrs = attributes_for(:authorize_transaction).merge(merchant: merchant)
         result = described_class.call(**attrs)
         expect(result).to be_success
 
         result = described_class.call(**attrs.merge(type: "badtype"))
         expect(result).to be_failure
-        expect(result.error.inspect).to include "unknown transaction type"
+        expect(result.error.inspect).to include "wrong transaction type"
 
         result = described_class.call(**attrs.merge(amount: nil))
         expect(result).to be_failure
@@ -44,21 +44,24 @@ describe CreateTransaction do
 
       it "creates charge transactions" do
         authorize_transaction = described_class.call(**authorize_transaction_attrs).transaction
-        result, attrs = nil, authorize_transaction_attrs.merge(type: "charge", parent: authorize_transaction)
+        expect(authorize_transaction.can_be_charged?).to be_truthy
+        result, attrs = nil, authorize_transaction_attrs.merge(type: "ChargeTransaction", initial_transaction: authorize_transaction)
+
+        # Create first charge transaction
         expect { result = described_class.call(**attrs) }.to change { ChargeTransaction.count }.by(1)
         expect(result).to be_success
         transaction = result.transaction
         expected_attrs = attrs
           .slice(:customer_phone, :customer_email, :amount)
-          .merge(type: "ChargeTransaction", authorize_transaction: authorize_transaction, status: "approved")
-        expect(result.transaction).to have_attributes(expected_attrs)
+          .merge(type: "ChargeTransaction", initial_transaction: authorize_transaction, status: "approved")
+        expect(transaction).to have_attributes(expected_attrs)
 
-        # Trying to create charge transaction twice
+        # Second charge transaction
         expect { result = described_class.call(**attrs) }.to change { ChargeTransaction.count }.by(1)
         expect(result).to be_success
         expect(result.transaction.status).to eq("error")
 
-        # Trying to create charge transaction thrice
+        # Third charge transaction
         expect { result = described_class.call(**attrs) }.to change { ChargeTransaction.count }.by(0)
         expect(result).to be_failure
         expect(result.transaction.status).to eq("error")

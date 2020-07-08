@@ -2,10 +2,9 @@ class CreateTransaction
   include Interactor
 
   def call
-    creators = Transaction::SLUGS.map { |k, v| [k, "Create#{v}".constantize] }.to_h # {charge: CreateChargeTransaction, ...}
-    creator = creators[context.type] # Choose Create<transactionType> class
+    creator = "Create#{context.type}".constantize rescue nil # TODO: Refactor. Not safe
     unless creator
-      context.fail!(error: { message: "unknown transaction type '#{context.type}'" })
+      context.fail!(error: { message: "wrong transaction type '#{context.type}'" })
     else
       creator.call(context)
     end

@@ -1,8 +1,7 @@
+# TODO: an Exception App is needed for custom http error pages
 
 # Api::V1::TransactionsController
 module Api::V1; class TransactionsController < BaseController
-
-  before_action :set_parent_transaction, only: [:create]
 
   # POST /api/v1/transactions
   def create
@@ -20,19 +19,12 @@ module Api::V1; class TransactionsController < BaseController
 
   private
 
-    def set_parent_transaction
-      @parent = @merchant.transactions.find(params[:parent])
-    rescue ActiveRecord::RecordNotFound => e
-      render_error :bad_request, :unknown_parent_transaction, uuid: params[:parent]
-    end
-
-    # Only allow a list of trusted parameters through.
-    def transaction_params
-      params \
-        .require(:transaction)
-        .permit(:id, :type, :parent, :amount, :customer_email, :customer_phone)
-        .merge(parent: @parent)
-        .merge(merchant: @merchant)
-    end
+  def transaction_params
+    permitted = %i[amount customer_email customer_phone initial_transaction_id type]
+    params \
+      .except(:transaction)
+      .permit(permitted)
+      .merge(merchant: @merchant)
+  end
 
 end; end

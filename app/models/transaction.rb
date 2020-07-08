@@ -1,3 +1,4 @@
+# TODO: Make sure instances of this class can't be saved
 class Transaction < ApplicationRecord
 
   self.implicit_order_column = :created_at
@@ -12,23 +13,23 @@ class Transaction < ApplicationRecord
   validates :customer_email, presence: true, format: { with: ::URI::MailTo::EMAIL_REGEXP }
   validates! :merchant, presence: true
 
-  validate :ensure_merchant_is_active
+  validate :validate_merchant_persistence
+  validate :validate_merchant_is_active
 
   scope :those_approved, -> { where(status: "approved") }
   scope :those_erroneous, -> { where(status: "error") }
 
-  SLUGS = {
-    "authorize" => "AuthorizeTransaction",
-    "charge"    => "ChargeTransaction",
-    "refund"    => "RefundTransaction",
-    "reversal"  => "ReversalTransaction",
-  }.freeze
-
 
   private
 
-  def ensure_merchant_is_active
+  def validate_merchant_is_active
     errors.add(:merchant, "must be active") unless self.merchant.status_active?
+  end
+
+  def validate_merchant_persistence
+    if self.merchant.new_record?
+      errors.add(:merchant, "must persist in database")
+    end
   end
 
 end

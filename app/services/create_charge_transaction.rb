@@ -3,11 +3,8 @@ class CreateChargeTransaction
 
   def call
     attributes = context.to_h
-      .slice(:amount, :merchant, :customer_email, :customer_phone)
-      .merge \
-        id: SecureRandom.uuid,
-        authorize_transaction: context.parent,
-        status: context.parent.can_be_charged? ? "approved" : "error"
+      .slice(:amount, :merchant, :customer_email, :customer_phone, :initial_transaction_id, :initial_transaction)
+      .merge(id: SecureRandom.uuid, status: "approved")
     ActiveRecord::Base.transaction do
       context.transaction = ChargeTransaction.new(attributes)
       context.transaction.tap do |o|

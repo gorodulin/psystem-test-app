@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Transaction, type: :model do
 
-  let(:record) { FactoryBot.build :transaction }
+  let(:merchant) { create :merchant }
+  let(:record)   { build :transaction, merchant: merchant }
 
   it "requires customer phone" do
     expect(record).to be_valid
@@ -17,8 +18,8 @@ RSpec.describe Transaction, type: :model do
   end
 
   it "requires merchant to be active" do
-    merchant = FactoryBot.create :merchant, status: "inactive"
-    authorize = FactoryBot.build :authorize_transaction, merchant: merchant
+    merchant = create :merchant, status: "inactive"
+    authorize = build :authorize_transaction, merchant: merchant
     expect(authorize).not_to be_valid
     merchant.status = "active"
     expect(authorize).to be_valid

@@ -23,6 +23,9 @@ module Psystem
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
+    config.exceptions_app = self.routes
+    config.consider_all_requests_local = false
+    config.action_controller.action_on_unpermitted_parameters = :raise
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
