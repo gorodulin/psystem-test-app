@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_secure_password
 
   has_one  :merchant, inverse_of: :user, required: false
 
