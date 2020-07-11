@@ -10,12 +10,16 @@ en:
           code: 20102
           title: "Unknown transaction type"
           description: ""
-        unknown_parent_transaction:
+        unknown_initial_transaction:
           code: 20101
-          title: "Unknown parent transaction"
+          title: "Unknown initial transaction"
           description: ""
         unprocessable_entity:
           code: 20103
           title: "Unprocessable entity"
+          description: ""
+        conflict:
+          code: 20104
+          title: "Conflict"
           description: ""
 

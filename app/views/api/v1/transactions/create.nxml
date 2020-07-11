@@ -1,0 +1,9 @@
+xml.result {
+  xml.transaction \
+    id: t.id,
+    type: t.type,
+    amount: t.amount,
+    status: t.status,
+    customer_email: t.customer_email,
+    customer_phone: t.customer_phone
+}
