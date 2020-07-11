@@ -1,0 +1,25 @@
+h1.h1 Merchants
+
+table.table.table-dark.table-striped id="merchants_list"
+  thead
+    tr
+      th scope="col"
+      th scope="col" User ID
+      th scope="col" Name
+      th scope="col" Email
+      th scope="col" Description
+      th scope="col"
+
+  tbody
+    - @merchants.each do |merchant|
+      tr
+        th
+          = link_to edit_merchant_path(merchant), class: "btn btn-secondary", id: "edit_merchant_#{merchant.id}_link" do
+            i.fa.fa-edit
+        th scope="row" = merchant.user.id
+        td = merchant.name
+        td = merchant.email
+        td = merchant.description
+        td
+          = link_to merchant, method: :delete, class: "btn btn-danger" do
+            i.fa.fa-times

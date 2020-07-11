@@ -9,4 +9,12 @@ class Merchant < ApplicationRecord
 
   validates :email, format: { with: ::URI::MailTo::EMAIL_REGEXP }
 
+  def is_active
+    self.status == "active"
+  end
+
+  def is_active=(bool)
+    self.status = ActiveRecord::Type::Boolean.new.cast(bool) ? "active" : "inactive"
+  end
+
 end

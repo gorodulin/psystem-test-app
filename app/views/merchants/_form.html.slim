@@ -1,0 +1,29 @@
+= form_for @merchant do |f|
+  - if @merchant.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@merchant.errors.count, "error")} prohibited this merchant from being saved:"
+      ul
+        - @merchant.errors.full_messages.each do |message|
+          li = message
+
+  .form-group.row
+    label.col-sm-2.col-form-label Name
+    .col-sm-10
+      = f.text_field :name, class: "form-control form-control-sm", placeholder: ""
+
+    label.col-sm-2.col-form-label Email
+    .col-sm-10
+      = f.text_field :email, class: "form-control form-control-sm", placeholder: ""
+
+    .col-sm-2
+    .col-sm-10
+      .custom-control.custom-checkbox.mb-3
+        = f.check_box :is_active, class: "custom-control-input", id: "is_active"
+        label.custom-control-label for="isActive" Merchant is active
+    .form-group.col-sm-12
+      label Description
+      = f.text_area :description, class: "form-control"
+
+  = button_tag type: "submit", class: "btn btn-primary", id: "update_action" do
+    i class="fa fa-save"
+    |  Update merchant
