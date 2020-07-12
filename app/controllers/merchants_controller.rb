@@ -4,7 +4,7 @@ class MerchantsController < ApplicationController
 
   # GET /merchants
   def index
-    @merchants = Merchant.all
+    @merchants = Merchant.includes(:user)
   end
 
   # GET /merchants/1/edit

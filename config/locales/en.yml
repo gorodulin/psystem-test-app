@@ -16,3 +16,11 @@ en:
       code: 10400
       http_status_code: 400
       title: "Bad request"
+    invalid_jwt_token:
+      code: 10500
+      http_status_code: 401
+      title: "Invalid authorization token"
+    missing_authorization_header:
+      code: 10600
+      http_status_code: 401
+      title: "Authorization header missing"

@@ -1,4 +1,4 @@
-require_relative 'boot'
+require_relative "boot"
 
 require "rails"
 # Pick the frameworks you want:
@@ -26,6 +26,7 @@ module Psystem
     config.exceptions_app = self.routes
     config.consider_all_requests_local = false
     config.action_controller.action_on_unpermitted_parameters = :raise
+    config.eager_load_paths << Rails.root.join("lib")
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers

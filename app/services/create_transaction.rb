@@ -8,7 +8,7 @@ class CreateTransaction
     else
       creator.call(context)
     end
-  rescue ActiveRecord::RecordInvalid => e
+  rescue ActiveRecord::RecordInvalid, ActiveModel::StrictValidationFailed => e
     error = ApplicationError::WrongTransactionParameters.new \
       initial_exception: e,
       details: context.transaction.errors.messages

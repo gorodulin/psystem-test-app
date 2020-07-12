@@ -2,14 +2,32 @@
 
 RSpec.describe "/transactions", type: :request do
 
+  let(:merchant) { create :merchant }
   let(:valid_payload) { attributes_for(:authorize_transaction).except(:id, :status) }
-  let(:request_headers) { { "Accept" => "application/json", "Content-Type" => "application/json" } }
+  let(:request_headers) do
+    {
+      "Accept" => "application/json",
+      "Content-Type" => "application/json",
+      "Authorization" => JsonWebToken.encode(id: merchant.id)
+    }
+  end
   let(:response_content_type) { "application/json; charset=utf-8" }
   let(:parse) { ->(body) { JSON.parse(body) } }
 
   describe "POST /transactions" do
 
     describe "valid JSON payload" do
+
+      it "requires valid JWT token" do
+        request_headers.delete("Authorization")
+        expect {
+          post api_v1_transactions_url, params: valid_payload, headers: request_headers, as: :json
+        }.to change(Transaction, :count).by(0)
+        expect(response.content_type).to eq(response_content_type)
+        expect { parse[response.body] }.not_to raise_error
+        expect(response.status).to eq(401)
+        expect(response.body).to include(*["10600", "Authorization header missing"])
+      end
 
       it "renders JSON with successful response" do
         expect {

@@ -9,12 +9,11 @@ module Api::V1; class TransactionsController < BaseController
     @errors = Array.wrap(result.error)
     @transaction = result.transaction
 
-    respond_to do |format|
-      unless result.success?
-        http_status = result&.error&.http_status_code || :bad_request
-        format.xml  { render template: "api/v1/errors", status: http_status }
-        format.json { render template: "api/v1/errors", status: http_status }
-      else
+    unless result.success?
+      http_status = result&.error&.http_status_code || :bad_request
+      render_error_response(status: http_status)
+    else
+      respond_to do |format|
         format.xml  { render status: :created }
         format.json { render status: :created }
       end
