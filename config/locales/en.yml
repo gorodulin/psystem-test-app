@@ -1,25 +1,18 @@
 en:
-  api:
-    v1:
-      errors:
-        bad_request:
-          code: 20100
-          title: "Bad Request"
-          description: ""
-        unknown_transaction_type:
-          code: 20102
-          title: "Unknown transaction type"
-          description: ""
-        unknown_initial_transaction:
-          code: 20101
-          title: "Unknown initial transaction"
-          description: ""
-        unprocessable_entity:
-          code: 20103
-          title: "Unprocessable entity"
-          description: ""
-        conflict:
-          code: 20104
-          title: "Conflict"
-          description: ""
-
+  application_error:
+    duplicate_transaction:
+      code: 10100
+      http_status_code: 409
+      title: "Duplicate transaction"
+    wrong_transaction_type:
+      code: 10200
+      http_status_code: 422
+      title: "Wrong transaction type"
+    wrong_transaction_parameters:
+      code: 10300
+      http_status_code: 422
+      title: "Wrong transaction parameter(s)"
+    bad_request:
+      code: 10400
+      http_status_code: 400
+      title: "Bad request"

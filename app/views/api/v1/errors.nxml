@@ -1,0 +1,12 @@
+xml.result(success: false, http_status: response.status) {
+  xml.errors {
+    @errors.each do |error|
+      xml.error {
+        xml.code error.code if error.code
+        xml.title error.title if error.title
+        xml.message error.message if error.message
+        xml.details error.details&.to_json if error.details
+      }
+    end
+  }
+}

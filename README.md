@@ -22,3 +22,7 @@ Application task names are prefixed with `psystem`.
 Described in `config/schedule.rb`
 
 To update crontab run `whenever --update-crontab`
+
+## Notes:
+
+- Metaprogramming example is in `application_error.rb`

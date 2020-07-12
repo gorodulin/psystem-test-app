@@ -10,8 +10,9 @@ gem "sass-rails", ">= 6"
 gem "webpacker", "~> 4.0"
 gem "jbuilder", "~> 2.7"
 gem "slim-rails"
-gem "cancancan"
-gem "whenever"
+gem "jwt", ">=2.2.1"
+gem "cancancan", ">=3.1.0"
+gem "whenever", ">= 1.0.0"
 gem "interactor", "~> 3.0" # Opinionated Result object pattern with shared context
 gem "actionpack-xml_parser" # XML parameters parser for Action Pack
 gem "bcrypt", "~> 3.1.7" # Use Active Model has_secure_password
@@ -21,9 +22,10 @@ gem "bcrypt", "~> 3.1.7" # Use Active Model has_secure_password
 gem "bootsnap", ">= 1.4.2", require: false # Reduces boot times through caching; required in config/boot.rb
 
 group :development, :test do
-  gem "ori"
+  gem "equivalent-xml"
+  gem "ori", ">= 0.1.0"
   gem "factory_bot_rails"
-  gem "faker"
+  gem "faker", ">= 2.13.0"
   gem "rspec-rails", "~> 4.0.0"
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw] # Call "byebug" anywhere in the code to stop execution and get a debugger console
 end
@@ -42,4 +44,4 @@ group :test do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+#gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]

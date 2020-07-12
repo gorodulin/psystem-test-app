@@ -6,16 +6,16 @@ module Api::V1; class TransactionsController < BaseController
   # POST /api/v1/transactions
   def create
     result = CreateTransaction.call(transaction_params)
-    @transaction, @error = result.to_h.values_at(:transaction, :error)
+    @errors = Array.wrap(result.error)
+    @transaction = result.transaction
 
     respond_to do |format|
-      if result.failure?
-        status = result.error[:kind] || :bad_request
-        format.xml { render }
-        format.json { render_error status, status, details: @error.slice(:message, :details) }
+      unless result.success?
+        http_status = result&.error&.http_status_code || :bad_request
+        format.xml  { render template: "api/v1/errors", status: http_status }
+        format.json { render template: "api/v1/errors", status: http_status }
       else
-        format.xml  { render locals: { t: @transaction }, status: :created }
-        #format.json { render json: @transaction.attributes, status: :created }
+        format.xml  { render status: :created }
         format.json { render status: :created }
       end
     end

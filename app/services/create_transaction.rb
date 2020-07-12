@@ -4,17 +4,20 @@ class CreateTransaction
   def call
     creator = "Create#{context.type}".constantize rescue nil # TODO: Refactor. Not safe
     unless creator
-      context.fail!(error: { message: "wrong transaction type '#{context.type}'" })
+      context.fail!(error: ApplicationError::WrongTransactionType.new)
     else
       creator.call(context)
     end
   rescue ActiveRecord::RecordInvalid => e
-    context.error = { exception: e, message: "Wrong parameter(s)", kind: :unprocessable_entity,
-                      details: context.transaction.errors.messages }
-    context.fail!
+    error = ApplicationError::WrongTransactionParameters.new \
+      initial_exception: e,
+      details: context.transaction.errors.messages
+    context.fail!(error: error)
   rescue ActiveRecord::RecordNotUnique => e
-    context.error = { exception: e, message: "Duplicate transaction", kind: :conflict }
-    context.fail!
+    error = ApplicationError::DuplicateTransaction.new \
+      initial_exception: e,
+      details: context.transaction.errors.messages
+    context.fail!(error: error)
   end
 
 end

@@ -1,0 +1,22 @@
+h1.h1 Transactions
+
+table.table.table-dark.table-striped id="transactions_list"
+  thead
+    tr
+      th scope="col" Id
+      th scope="col" Type
+      th scope="col" Status
+      th scope="col" Amount
+      th scope="col" Customer Email
+      th scope="col" Customer Phone
+
+  tbody
+    - @transactions.each do |transaction|
+      tr
+        th scope="row" = transaction.id
+        td = transaction.type
+        td = transaction.status
+        td = transaction.amount
+        td = transaction.customer_email
+        td = transaction.customer_phone
+

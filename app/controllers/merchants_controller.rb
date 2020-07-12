@@ -7,11 +7,6 @@ class MerchantsController < ApplicationController
     @merchants = Merchant.all
   end
 
-  # GET /merchants/new
-  def new
-    @merchant = Merchant.new
-  end
-
   # GET /merchants/1/edit
   def edit
   end
@@ -30,7 +25,6 @@ class MerchantsController < ApplicationController
   end
 
   # DELETE /merchants/1
-  # DELETE /merchants/1.json
   def destroy
     @merchant.destroy
     respond_to do |format|

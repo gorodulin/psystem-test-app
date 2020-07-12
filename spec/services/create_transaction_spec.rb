@@ -20,14 +20,15 @@ describe CreateTransaction do
         attrs = attributes_for(:authorize_transaction).merge(merchant: merchant)
         result = described_class.call(**attrs)
         expect(result).to be_success
+        expect(result.error).to be_nil
 
         result = described_class.call(**attrs.merge(type: "badtype"))
         expect(result).to be_failure
-        expect(result.error.inspect).to include "wrong transaction type"
+        expect(result.error).to be_a(ApplicationError::WrongTransactionType)
 
         result = described_class.call(**attrs.merge(amount: nil))
         expect(result).to be_failure
-        expect(result.error.inspect).to include "Amount is not a number"
+        expect(result.error).to be_a(ApplicationError::WrongTransactionParameters)
       end
 
     end # ...describe
