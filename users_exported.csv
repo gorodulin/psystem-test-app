@@ -1,0 +1,4 @@
+1,John Doe,dummypass0,doe@domain.com,admin,merchant,active,Our dear merchant (and admin!)
+2,Batman,dummypass1,batman@domain.com,admin,,,
+3,Robin,dummypass2,robin@domain.com,,merchant,inactive,Former merchant
+4,Someone,dummypass3,user@domain.com,,,active,
