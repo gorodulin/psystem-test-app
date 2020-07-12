@@ -23,6 +23,116 @@ Described in `config/schedule.rb`
 
 To update crontab run `whenever --update-crontab`
 
+## JSON API
+
+Endpoint: `POST /api/v1/transactions`
+
+Endpoint expects some http headers to be set:
+
+```
+Accept: application/json
+Content-Type: application/json
+Authorization: <jwt_token>
+```
+
+Request example:
+
+```json
+{
+  "transaction": {
+    "type": "AuthorizeTransaction",
+    "customer_email": "a@b.c",
+    "customer_phone": "+123456789",
+    "amount": 10
+  }
+}
+```
+
+Successful response example:
+
+```json
+{
+    "success": true,
+    "http_status": 201,
+    "data": {
+        "uuid": "e05f1f56-ed0a-4a8b-8e4d-ba6ceaa95569",
+        "type": "ReversalTransaction",
+        "customer_phone": "+123456789",
+        "customer_email": "a@b.c",
+        "status": "approved",
+        "created_at": "2020-07-12T22:48:24.403Z"
+    }
+}
+```
+
+Unsuccessful response example:
+
+```json
+{
+  "success": false,
+  "http_status": 422,
+  "errors": {
+    "code": 10300,
+    "title": "Wrong transaction parameter(s)",
+    "message": null,
+    "details": {
+      "amount": [
+        "must be greater than 0"
+      ]
+    }
+  }
+}
+```
+
+## XML API
+
+Endpoint: `POST /api/v1/transactions` (same as JSON)
+
+Endpoint expects some http headers to be set:
+
+```
+Accept: application/xml or (text/xml)
+Content-Type: application/xml (or text/xml)
+Authorization: <jwt_token>
+```
+
+Request example:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<transaction
+  type="AuthorizeTransaction"
+  customer_email="a@b.c"
+  customer_phone="+123456789"
+  amount="10"
+  />
+```
+
+Successful response example:
+
+```xml
+<result success="true" http_status="201">
+  <data>
+    <transaction id="89e4760a-1a72-4f17-a17f-f784d39ea62d" type="AuthorizeTransaction" amount="10" customer_email="a@b.c" customer_phone="+123456789"></transaction>
+  </data>
+</result>
+```
+
+Unsuccessful response example:
+
+```xml
+<result success="false" http_status="422">
+  <errors>
+    <error>
+      <code>10300</code>
+      <title>Wrong transaction parameter(s)</title>
+      <details>{"customer_phone":["is invalid"]}</details>
+    </error>
+  </errors>
+</result>
+```
+
 ## Notes:
 
-- Metaprogramming example is in `application_error.rb`
+- Metaprogramming example is in `/app/errors/application_error.rb`
+
