@@ -11,6 +11,31 @@ Top priority: not to allow to store invalid/inconsistent data.
 - Merchant role has its own model associated with user. It makes it alienable without massive update query in `transactions` table.
 - Transactions are implemented as a set of models with STI.
 
+### Installation
+
+```
+# Step 1: install dip locally (helper tool for docker-compose)
+
+brew tap bibendi/dip && brew install dip
+# or
+gem install dip
+
+# Step 2: update gems and populate db
+
+cd <app dir>
+
+dip bundle install
+dip rake db:create
+dip rake db:migrate
+dip rake psystem:users:csv_import users_exported.csv
+
+# Step 3: run the app in development mode
+
+dip rails s
+
+open http://localhost:3000/merchants
+```
+
 ### Rake tasks
 
 Application task names are prefixed with `psystem`.
